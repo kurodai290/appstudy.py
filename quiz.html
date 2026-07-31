@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>クイズに挑戦！ | ワクワク学習ポータル</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+    <header>
+        <h1 id="quiz-title">クイズ画面</h1>
+        <p id="quiz-subtitle">全問正解をめざしてがんばろう！</p>
+    </header>
+
+    <div class="container">
+        <div class="quiz-container">
+            <!-- 現在のステージや進捗の表示 -->
+            <div class="quiz-progress">
+                <span id="level-badge" class="badge">基礎ステージ</span>
+                <span id="question-number">第 1 問</span>
+            </div>
+
+            <!-- 問題文 -->
+            <div id="question-text" class="question-box">ここに問題が表示されます。</div>
+
+            <!-- 選択肢ボタン -->
+            <div id="choices-container" class="choices-grid">
+                <!-- ボタンがJavaScriptで自動生成されます -->
+            </div>
+
+            <!-- 結果表示エリア -->
+            <div id="result-message" class="result-box hide">
+                <p id="feedback-text"></p>
+                <button id="next-btn" class="btn">次の問題へ</button>
+            </div>
+        </div>
+
+        <div style="text-align: center; margin-top: 20px;">
+            <a href="index.html" class="back-link">⬅ トップページにもどる</a>
+        </div>
+    </div>
+
+    <!-- クイズの仕組みを動かすJavaScriptファイルを読み込む -->
+    <script src="quiz.js"></script>
+</body>
+</html>
