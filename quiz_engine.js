@@ -5,6 +5,11 @@ let currentQuestionIndex = 0;
 let score = 0;
 let dynamicCorrectAnswer = "";
 
+// ⏱ タイマー用の変数
+let startTime = Date.now();
+let timerInterval = null;
+let finalElapsedTime = 0;
+
 const quizTitle = document.getElementById('quiz-title');
 const levelBadge = document.getElementById('level-badge');
 const qNumberText = document.getElementById('question-number');
@@ -13,8 +18,29 @@ const choicesContainer = document.getElementById('choices-container');
 const resultMessage = document.getElementById('result-message');
 const feedbackText = document.getElementById('feedback-text');
 const nextBtn = document.getElementById('next-btn');
+const timerDisplay = document.getElementById('timer-display');
+
+// ランキング用の部品
+const rankingSection = document.getElementById('ranking-section');
+const registerScoreZone = document.getElementById('register-score-zone');
+const playerNameInput = document.getElementById('player-name-input');
+const saveScoreBtn = document.getElementById('save-score-btn');
+const rankingTableBody = document.getElementById('ranking-table-body');
+
+// 学年ごとに個別のランキングを作るためのユニークなキー（URLのfile名を利用）
+const urlParams = new URLSearchParams(window.location.search);
+const rankingKey = `ranking_${urlParams.get('file') || 'data_shou1'}`;
 
 quizTitle.innerText = quizTitleText;
+
+// ⏱ タイマーをスタートさせる処理
+function startTimer() {
+    startTime = Date.now();
+    timerInterval = setInterval(() => {
+        let seconds = Math.floor((Date.now() - startTime) / 1000);
+        timerDisplay.innerText = `タイム: ${seconds}秒`;
+    }, 1000);
+}
 
 function getRandomInt(min, max) {
     return Math.floor(Math.random() * (max - min + 1)) + min;
@@ -42,7 +68,7 @@ function showQuestion() {
         let finalChoices = [];
 
         if (currentData.isRandom) {
-            // 各パターンの乱数計算
+            // （中身のランダム生成ロジックは前回と同じ）
             if (currentData.pattern === "shou1_add") {
                 let n1 = getRandomInt(1, 9), n2 = getRandomInt(1, 9);
                 questionString = `${n1} ＋ ${n2} は なに？`;
@@ -82,11 +108,10 @@ function showQuestion() {
             }
             else if (currentData.pattern === "shou6_ratio") {
                 let n1 = getRandomInt(2, 5), n2 = getRandomInt(3, 6);
-                let multiplier = getRandomInt(2, 4);
-                let x = n1 * multiplier;
-                questionString = `比の計算： ${n1} : ${n2} ＝ ${x} : ❓`;
-                dynamicCorrectAnswer = String(n2 * multiplier);
-                finalChoices = [dynamicCorrectAnswer, String(n2*multiplier+1), String(n2*multiplier-1), String(n2*multiplier+2)];
+                let m = getRandomInt(2, 4);
+                questionString = `比の計算： ${n1} : ${n2} ＝ ${n1*m} : ❓`;
+                dynamicCorrectAnswer = String(n2 * m);
+                finalChoices = [dynamicCorrectAnswer, String(n2*m+1), String(n2*m-1), String(n2*m+2)];
             }
             else if (currentData.pattern === "chu1_calc") {
                 let n1 = getRandomInt(2, 9), n2 = getRandomInt(3, 9);
@@ -102,11 +127,10 @@ function showQuestion() {
             }
             else if (currentData.pattern === "chu3_q2") {
                 let z = getRandomInt(2, 3), f1 = getRandomInt(3, 5), f2 = getRandomInt(2, 4);
-                questionString = `【静岡県入試・類題】 (${z*f1}a² － ${z*f2}ab) ÷ ${z}a を計算しなさい。`;
+                questionString = `【静岡県入試・類題】 (${z*f1}a² － ${z*f2}ab) ÷ ${z}a を campus計算しなさい。`;
                 dynamicCorrectAnswer = `${f1}a - ${f2}b`;
                 finalChoices = [dynamicCorrectAnswer, `${z*f1}a - ${f2}b`, `${f1}a + ${f2}b`, `${f1}a² - ${f2}b`];
             }
-
             finalChoices = shuffleArray(finalChoices);
         } else {
             questionString = currentData.q;
@@ -147,10 +171,20 @@ function showQuestion() {
             });
         }
     } else {
+        // 🎉 【全問終了時】タイマーを停止してランキングを表示
+        clearInterval(timerInterval);
+        finalElapsedTime = Math.floor((Date.now() - startTime) / 1000);
+        timerDisplay.innerText = `クリアタイム: ${finalElapsedTime}秒`;
+
         levelBadge.style.display = 'none';
         qNumberText.innerText = "終了";
-        qText.innerText = "全問クリア！素晴らしい集中力です！";
-        feedbackText.innerHTML = `スコア: <strong>${questions.length}問中 ${score}問正解</strong> 🌟`;
+        qText.innerText = "全問クリア！";
+        feedbackText.innerHTML = `あなたの結果: <strong>${questions.length}問中 ${score}問正解</strong> 🌟`;
+        
+        // ランキング画面を出現させる
+        rankingSection.classList.remove('hide');
+        displayRanking();
+
         nextBtn.innerText = "トップページにもどる";
         nextBtn.onclick = () => window.location.href = "index.html";
         resultMessage.classList.remove('hide');
@@ -171,5 +205,15 @@ function checkAnswer(selectedButton, selectedChoice, correctChoice) {
     resultMessage.classList.remove('hide');
 }
 
-nextBtn.onclick = () => { currentQuestionIndex++; showQuestion(); };
-showQuestion();
+// 🏆 ランキングを画面に描画する関数
+function displayRanking() {
+    let rankingData = JSON.parse(localStorage.getItem(rankingKey)) || [];
+    rankingTableBody.innerHTML = "";
+
+    // データが空のとき
+    if (rankingData.length === 0) {
+        rankingTableBody.innerHTML = `<tr><td colspan="4" style="text-align:center; color:#a0aec0;">まだ記録はありません</td></tr>`;
+        return;
+    }
+
+    // 上位5位までを表に並べる
