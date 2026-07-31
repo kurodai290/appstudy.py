@@ -1,5 +1,8 @@
+// URLからクイズのID（例: shou1_sansu）をゲットする
 const urlParams = new URLSearchParams(window.location.search);
 const quizId = urlParams.get('id');
+
+// 該当するクイズデータを取得
 const currentQuizContainer = ALL_QUIZ_DATA[quizId];
 
 let questions = [];
@@ -13,6 +16,7 @@ if (currentQuizContainer) {
 let currentQuestionIndex = 0;
 let score = 0;
 
+// 画面の部品を取得
 const quizTitle = document.getElementById('quiz-title');
 const levelBadge = document.getElementById('level-badge');
 const qNumberText = document.getElementById('question-number');
@@ -22,6 +26,7 @@ const resultMessage = document.getElementById('result-message');
 const feedbackText = document.getElementById('feedback-text');
 const nextBtn = document.getElementById('next-btn');
 
+// タイトルをセット
 quizTitle.innerText = quizTitleText;
 
 function showQuestion() {
@@ -31,14 +36,23 @@ function showQuestion() {
     if (currentQuestionIndex < questions.length) {
         const currentData = questions[currentQuestionIndex];
         
+        // 基礎・応用・記述でバッジを切り替える
         levelBadge.innerText = `${currentData.type}ステージ`;
-        levelBadge.className = currentData.type === "応用" ? "badge advanced" : "badge basic";
+        if (currentData.type === "応用") {
+            levelBadge.className = "badge advanced";
+        } else if (currentData.type === "記述") {
+            levelBadge.className = "badge shoumei-badge";
+            levelBadge.innerText = "記述式証明";
+        } else {
+            levelBadge.className = "badge basic";
+        }
+
         qNumberText.innerText = `第 ${currentQuestionIndex + 1} 問 / 全 ${questions.length} 問`;
         qText.innerText = currentData.q;
 
-        // 🌟【新機能】もし記述式問題だったら
+        // もし記述式（図形の証明など）の問題だったら
         if (currentData.type === "記述") {
-            // 文字を入力する大きなボックスを作る
+            // テキストエリア（文字入力エリア）を作る
             const textarea = document.createElement('textarea');
             textarea.placeholder = "ここにあなたの証明を書いてみよう！\n\n（例：△ABMと△ACMにおいて〜）";
             textarea.classList.add('shoumei-input');
@@ -53,7 +67,6 @@ function showQuestion() {
                 textarea.disabled = true;
                 submitBtn.disabled = true;
                 
-                // 模範解答を表示して自己採点してもらう
                 feedbackText.innerHTML = `<span style="color:#2b6cb0;">👇下の模範解答と自分の書いた文章を見比べてみよう！</span>`;
                 
                 const answerBox = document.createElement('div');
@@ -66,7 +79,7 @@ function showQuestion() {
             choicesContainer.appendChild(submitBtn);
 
         } else {
-            // 通常の4択問題
+            // 通常の4択問題だったらボタンを自動作成
             currentData.c.forEach(choice => {
                 const button = document.createElement('button');
                 button.innerText = choice;
@@ -76,10 +89,10 @@ function showQuestion() {
             });
         }
     } else {
+        // すべて解き終わったとき
         levelBadge.style.display = 'none';
         qNumberText.innerText = "クリア！";
         qText.innerText = "全問終了しました！";
-        // 記述式を含む場合は点数計算を省く、または全クリアのお祝いにする
         feedbackText.innerHTML = `よくがんばりました！すべての証明・問題をマスターしたぞ！ 🌟`;
         nextBtn.innerText = "トップページにもどる";
         nextBtn.onclick = () => window.location.href = "index.html";
@@ -110,6 +123,7 @@ nextBtn.onclick = () => {
     showQuestion();
 };
 
+// クイズ開始！
 if (questions.length > 0) {
     showQuestion();
 } else {
