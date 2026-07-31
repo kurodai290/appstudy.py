@@ -27,7 +27,7 @@ const playerNameInput = document.getElementById('player-name-input');
 const saveScoreBtn = document.getElementById('save-score-btn');
 const rankingTableBody = document.getElementById('ranking-table-body');
 
-// 学年ごとに個別のランキングを作るためのユニークなキー（URLのfile名を利用）
+// 学年ごとに個別のランキングを作るためのユニークなキー
 const urlParams = new URLSearchParams(window.location.search);
 const rankingKey = `ranking_${urlParams.get('file') || 'data_shou1'}`;
 
@@ -68,7 +68,6 @@ function showQuestion() {
         let finalChoices = [];
 
         if (currentData.isRandom) {
-            // 各パターンの乱数計算
             if (currentData.pattern === "shou1_add") {
                 let n1 = getRandomInt(1, 9), n2 = getRandomInt(1, 9);
                 questionString = `${n1} ＋ ${n2} は なに？`;
@@ -171,7 +170,6 @@ function showQuestion() {
             });
         }
     } else {
-        // タイマーを停止してランキングを表示
         clearInterval(timerInterval);
         finalElapsedTime = Math.floor((Date.now() - startTime) / 1000);
         timerDisplay.innerText = `クリアタイム: ${finalElapsedTime}秒`;
