@@ -68,7 +68,7 @@ function showQuestion() {
         let finalChoices = [];
 
         if (currentData.isRandom) {
-            // （中身のランダム生成ロジックは前回と同じ）
+            // 各パターンの乱数計算
             if (currentData.pattern === "shou1_add") {
                 let n1 = getRandomInt(1, 9), n2 = getRandomInt(1, 9);
                 questionString = `${n1} ＋ ${n2} は なに？`;
@@ -127,7 +127,7 @@ function showQuestion() {
             }
             else if (currentData.pattern === "chu3_q2") {
                 let z = getRandomInt(2, 3), f1 = getRandomInt(3, 5), f2 = getRandomInt(2, 4);
-                questionString = `【静岡県入試・類題】 (${z*f1}a² － ${z*f2}ab) ÷ ${z}a を campus計算しなさい。`;
+                questionString = `【静岡県入試・類題】 (${z*f1}a² － ${z*f2}ab) ÷ ${z}a を計算しなさい。`;
                 dynamicCorrectAnswer = `${f1}a - ${f2}b`;
                 finalChoices = [dynamicCorrectAnswer, `${z*f1}a - ${f2}b`, `${f1}a + ${f2}b`, `${f1}a² - ${f2}b`];
             }
@@ -171,7 +171,7 @@ function showQuestion() {
             });
         }
     } else {
-        // 🎉 【全問終了時】タイマーを停止してランキングを表示
+        // タイマーを停止してランキングを表示
         clearInterval(timerInterval);
         finalElapsedTime = Math.floor((Date.now() - startTime) / 1000);
         timerDisplay.innerText = `クリアタイム: ${finalElapsedTime}秒`;
@@ -181,7 +181,6 @@ function showQuestion() {
         qText.innerText = "全問クリア！";
         feedbackText.innerHTML = `あなたの結果: <strong>${questions.length}問中 ${score}問正解</strong> 🌟`;
         
-        // ランキング画面を出現させる
         rankingSection.classList.remove('hide');
         displayRanking();
 
@@ -205,15 +204,12 @@ function checkAnswer(selectedButton, selectedChoice, correctChoice) {
     resultMessage.classList.remove('hide');
 }
 
-// 🏆 ランキングを画面に描画する関数
 function displayRanking() {
     let rankingData = JSON.parse(localStorage.getItem(rankingKey)) || [];
     rankingTableBody.innerHTML = "";
-
-    // データが空のとき
     if (rankingData.length === 0) {
         rankingTableBody.innerHTML = `<tr><td colspan="4" style="text-align:center; color:#a0aec0;">まだ記録はありません</td></tr>`;
         return;
     }
-
-    // 上位5位までを表に並べる
+    rankingData.forEach((record, index) => {
+        const row = document.createElement('tr');
