@@ -4,44 +4,27 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>ワクワク学習ポータル | 小学生・中学生の勉強ルーム</title>
-    <!-- style.cssを読み込む設定 -->
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
 
-    <!-- ヘッダーエリア -->
     <header>
         <h1>🎒 ワクワク学習ポータル</h1>
         <p>小学校から中学生まで使える！毎日の勉強を楽しく応援するサイト</p>
     </header>
 
-    <!-- メインコンテンツ -->
     <div class="container">
 
         <!-- 小学生向けセクション -->
-        <h2 class="section-title">🏫 小学生の学習ルーム</h2>
+        <h2 class="section-title">🏫 小学生の学習ルーム（基礎中心）</h2>
         <div class="grid">
             
-            <!-- 小学生：国語 -->
-            <div class="card">
-                <div class="card-header shou-kokugo">📕 国語（こくご）</div>
-                <div class="card-body">
-                    <ul>
-                        <li><a href="#">かん字のれんしゅう <span class="arrow">▶</span></a></li>
-                        <li><a href="#">ことばのパズル <span class="arrow">▶</span></a></li>
-                        <li><a href="#">おんどくテキスト <span class="arrow">▶</span></a></li>
-                    </ul>
-                </div>
-            </div>
-
-            <!-- 小学生：算数 -->
             <div class="card">
                 <div class="card-header shou-sansu">📘 算数（さんすう）</div>
                 <div class="card-body">
                     <ul>
-                        <li><a href="#">たし算・ひき算クイズ <span class="arrow">▶</span></a></li>
-                        <li><a href="#">かけ算九九マスター <span class="arrow">▶</span></a></li>
-                        <li><a href="#">文章題（ぶんしょうだい） <span class="arrow">▶</span></a></li>
+                        <!-- quiz.htmlに学年と教科の情報を送るリンク -->
+                        <li><a href="quiz.html?grade=shou&subject=sansu">たし算・ひき算クイズ <span class="arrow">▶</span></a></li>
                     </ul>
                 </div>
             </div>
@@ -49,29 +32,15 @@
         </div>
 
         <!-- 中学生向けセクション -->
-        <h2 class="section-title">✍ 中学生の学習ルーム</h2>
+        <h2 class="section-title">✍ 中学生の学習ルーム（基礎 ➔ 応用）</h2>
         <div class="grid">
             
-            <!-- 中学生：英語 -->
-            <div class="card">
-                <div class="card-header chu-eigo">🟢 英語 (English)</div>
-                <div class="card-body">
-                    <ul>
-                        <li><a href="#">中学必須英単語テスト <span class="arrow">▶</span></a></li>
-                        <li><a href="#">基本英文法チェック <span class="arrow">▶</span></a></li>
-                        <li><a href="#">リスニング練習問題 <span class="arrow">▶</span></a></li>
-                    </ul>
-                </div>
-            </div>
-
-            <!-- 中学生：数学 -->
             <div class="card">
                 <div class="card-header chu-suugaku">🟣 数学 (Math)</div>
                 <div class="card-body">
                     <ul>
-                        <li><a href="#">正の数・負の数計算 <span class="arrow">▶</span></a></li>
-                        <li><a href="#">方程式の解き方トレーニング <span class="arrow">▶</span></a></li>
-                        <li><a href="#">図形の証明問題攻略 <span class="arrow">▶</span></a></li>
+                        <!-- quiz.htmlに学年と教科の情報を送るリンク -->
+                        <li><a href="quiz.html?grade=chu&subject=suugaku">正の数・負の数計算 <span class="arrow">▶</span></a></li>
                     </ul>
                 </div>
             </div>
@@ -80,7 +49,6 @@
 
     </div>
 
-    <!-- フッターエリア -->
     <footer>
         <p>© 2026 ワクワク学習ポータル. みんなの学びを応援しています！</p>
     </footer>
