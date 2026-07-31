@@ -22,7 +22,6 @@
 
             <div id="question-text" class="question-box">問題を読み込んでいます...</div>
 
-            <!-- ここに4択ボタン、または記述式の入力欄が自動で入ります -->
             <div id="choices-container" class="choices-grid"></div>
 
             <div id="result-message" class="result-box hide">
@@ -36,8 +35,20 @@
         </div>
     </div>
 
-    <!-- ２つのJavaScriptファイルを順番に読み込む -->
-    <script src="quiz_data.js"></script>
-    <script src="quiz_engine.js"></script>
+    <script>
+        // URLの「?file=data_shou1」からファイル名を読み取って、動的にデータを読み込む
+        const urlParams = new URLSearchParams(window.location.search);
+        const fileName = urlParams.get('file') || 'data_shou1';
+        
+        const dataScript = document.createElement('script');
+        dataScript.src = `data/${fileName}.js`;
+        document.body.appendChild(dataScript);
+
+        dataScript.onload = () => {
+            const engineScript = document.createElement('script');
+            engineScript.src = 'quiz_engine.js';
+            document.body.appendChild(engineScript);
+        };
+    </script>
 </body>
 </html>
