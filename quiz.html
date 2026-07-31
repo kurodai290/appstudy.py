@@ -15,21 +15,15 @@
 
     <div class="container">
         <div class="quiz-container">
-            <!-- 現在のステージや進捗の表示 -->
             <div class="quiz-progress">
-                <span id="level-badge" class="badge">基礎ステージ</span>
+                <span id="level-badge" class="badge">ステージ</span>
                 <span id="question-number">第 1 問</span>
             </div>
 
-            <!-- 問題文 -->
-            <div id="question-text" class="question-box">ここに問題が表示されます。</div>
+            <div id="question-text" class="question-box">問題を読み込んでいます...</div>
 
-            <!-- 選択肢ボタン -->
-            <div id="choices-container" class="choices-grid">
-                <!-- ボタンがJavaScriptで自動生成されます -->
-            </div>
+            <div id="choices-container" class="choices-grid"></div>
 
-            <!-- 結果表示エリア -->
             <div id="result-message" class="result-box hide">
                 <p id="feedback-text"></p>
                 <button id="next-btn" class="btn">次の問題へ</button>
@@ -41,7 +35,8 @@
         </div>
     </div>
 
-    <!-- クイズの仕組みを動かすJavaScriptファイルを読み込む -->
-    <script src="quiz.js"></script>
+    <!-- ２つのJSファイルを順番に読み込む -->
+    <script src="quiz_data.js"></script>
+    <script src="quiz_engine.js"></script>
 </body>
 </html>
