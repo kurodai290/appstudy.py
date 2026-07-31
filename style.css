@@ -1,0 +1,131 @@
+/* 全体のデザイン設定 */
+body {
+    font-family: 'Helvetica Neue', Arial, 'Hiragino Kaku Gothic ProN', sans-serif;
+    margin: 0;
+    padding: 0;
+    background-color: #f0f9ff;
+    color: #333;
+    line-height: 1.6;
+}
+
+/* ヘッダー（タイトル部分） */
+header {
+    background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+    color: white;
+    text-align: center;
+    padding: 40px 20px;
+    box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+}
+
+header h1 {
+    margin: 0;
+    font-size: 2.5rem;
+    text-shadow: 2px 2px 4px rgba(0,0,0,0.2);
+}
+
+header p {
+    margin: 10px 0 0 0;
+    font-size: 1.1rem;
+    opacity: 0.9;
+}
+
+/* メインコンテンツのレイアウト */
+.container {
+    max-width: 1200px;
+    margin: 30px auto;
+    padding: 0 20px;
+}
+
+/* 学年セクションのタイトル */
+.section-title {
+    font-size: 1.8rem;
+    color: #2b6cb0;
+    border-left: 6px solid #4facfe;
+    padding-left: 15px;
+    margin-top: 40px;
+    margin-bottom: 20px;
+}
+
+/* カードを並べるグリッド */
+.grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 25px;
+}
+
+/* 各教科のカードデザイン */
+.card {
+    background-color: white;
+    border-radius: 15px;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.05);
+    overflow: hidden;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    display: flex;
+    flex-direction: column;
+}
+
+.card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 8px 20px rgba(0,0,0,0.15);
+}
+
+/* 教科ごとの色（ヘッダー） */
+.card-header {
+    padding: 20px;
+    color: white;
+    font-weight: bold;
+    font-size: 1.3rem;
+    text-align: center;
+}
+
+.shou-kokugo { background-color: #ff6b6b; }
+.shou-sansu { background-color: #4da3ff; }
+.chu-eigo { background-color: #2bcbba; }
+.chu-suugaku { background-color: #a55eea; }
+
+/* カードの中身 */
+.card-body {
+    padding: 20px;
+    flex-grow: 1;
+}
+
+.card-body ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.card-body li {
+    margin-bottom: 12px;
+    padding-bottom: 8px;
+    border-bottom: 1px dashed #eee;
+}
+
+/* リンクボタン */
+.card-body a {
+    color: #4a5568;
+    text-decoration: none;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-weight: 500;
+}
+
+.card-body a:hover {
+    color: #3182ce;
+}
+
+.arrow {
+    font-size: 0.9rem;
+    color: #cbd5e0;
+}
+
+/* フッター */
+footer {
+    text-align: center;
+    padding: 30px;
+    margin-top: 60px;
+    background-color: #2d3748;
+    color: white;
+    font-size: 0.9rem;
+}
