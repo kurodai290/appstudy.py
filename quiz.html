@@ -14,6 +14,9 @@
     </header>
 
     <div class="container">
+        <!-- ⏱ タイマー表示 -->
+        <div id="timer-display" class="timer-box">タイム: 0秒</div>
+
         <div class="quiz-container">
             <div class="quiz-progress">
                 <span id="level-badge" class="badge">ステージ</span>
@@ -28,6 +31,34 @@
                 <p id="feedback-text"></p>
                 <button id="next-btn" class="btn">次の問題へ</button>
             </div>
+
+            <!-- 🏆 【新設】ランキング登録・表示エリア -->
+            <div id="ranking-section" class="ranking-box hide">
+                <h2>🏆 歴代ハイスコアランキング</h2>
+                
+                <!-- 名前入力フォーム -->
+                <div id="register-score-zone">
+                    <p>ランクイン達成！名前を入力して記録を残そう：</p>
+                    <input type="text" id="player-name-input" placeholder="なまえ（5文字まで）" maxlength="5">
+                    <button id="save-score-btn" class="btn">ランキングに登録</button>
+                </div>
+
+                <!-- ランキング順位表 -->
+                <table class="ranking-table">
+                    <thead>
+                        <tr>
+                            <th>順位</th>
+                            <th>なまえ</th>
+                            <th>正解数</th>
+                            <th>タイム</th>
+                        </tr>
+                    </thead>
+                    <tbody id="ranking-table-body">
+                        <!-- ここにJavaScriptで順位が並びます -->
+                    </tbody>
+                </table>
+            </div>
+
         </div>
 
         <div style="text-align: center; margin-top: 20px;">
@@ -36,7 +67,6 @@
     </div>
 
     <script>
-        // URLの「?file=data_shou1」からファイル名を読み取って、動的にデータを読み込む
         const urlParams = new URLSearchParams(window.location.search);
         const fileName = urlParams.get('file') || 'data_shou1';
         
