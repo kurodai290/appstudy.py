@@ -1,150 +1,37 @@
-body {
-    font-family: 'Helvetica Neue', Arial, 'Hiragino Kaku Gothic ProN', sans-serif;
-    margin: 0;
-    padding: 0;
-    background-color: #f0f9ff;
-    color: #333;
-    line-height: 1.6;
-}
-
-header {
-    background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
-    color: white;
-    text-align: center;
-    padding: 30px 20px;
-    box-shadow: 0 4px 6px rgba(0,0,0,0.1);
-}
-
+body { font-family: 'Helvetica Neue', Arial, sans-serif; margin: 0; padding: 0; background-color: #f0f9ff; color: #333; }
+header { background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%); color: white; text-align: center; padding: 30px 20px; }
 header h1 { margin: 0; font-size: 2.2rem; }
 header p { margin: 10px 0 0 0; font-size: 1rem; opacity: 0.9; }
-
-.container {
-    max-width: 1000px;
-    margin: 30px auto;
-    padding: 0 20px;
-}
-
-.section-title {
-    font-size: 1.6rem;
-    color: #2b6cb0;
-    border-left: 6px solid #4facfe;
-    padding-left: 15px;
-    margin-top: 40px;
-    margin-bottom: 20px;
-}
-
-.grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-    gap: 20px;
-}
-
-.card {
-    background-color: white;
-    border-radius: 12px;
-    box-shadow: 0 4px 10px rgba(0,0,0,0.05);
-    overflow: hidden;
-    transition: transform 0.2s ease;
-}
-
+.container { max-width: 1000px; margin: 30px auto; padding: 0 20px; }
+.section-title { font-size: 1.6rem; color: #2b6cb0; border-left: 6px solid #4facfe; padding-left: 15px; margin-top: 40px; margin-bottom: 20px; }
+.grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 20px; }
+.card { background-color: white; border-radius: 12px; box-shadow: 0 4px 10px rgba(0,0,0,0.05); overflow: hidden; transition: transform 0.2s ease; }
 .card:hover { transform: translateY(-3px); }
-
-.card-header {
-    padding: 15px;
-    color: white;
-    font-weight: bold;
-    font-size: 1.1rem;
-    text-align: center;
-}
-
+.card-header { padding: 15px; color: white; font-weight: bold; font-size: 1.1rem; text-align: center; }
 .shou-sansu { background-color: #4da3ff; }
 .chu-suugaku { background-color: #a55eea; }
-
 .card-body { padding: 15px; }
 .card-body ul { list-style: none; padding: 0; margin: 0; }
 .card-body li { margin-bottom: 10px; border-bottom: 1px dashed #eee; padding-bottom: 5px; }
-
-.card-body a {
-    color: #4a5568;
-    text-decoration: none;
-    display: flex;
-    justify-content: space-between;
-    font-weight: bold;
-}
-.card-body a:hover { color: #3182ce; }
+.card-body a { color: #4a5568; text-decoration: none; display: flex; justify-content: space-between; font-weight: bold; }
 .arrow { color: #cbd5e0; }
-
-/* ーーークイズ・記述画面用 ーーー */
-.quiz-container {
-    background-color: white;
-    padding: 35px;
-    border-radius: 15px;
-    box-shadow: 0 10px 25px rgba(0,0,0,0.05);
-}
+.quiz-container { background-color: white; padding: 35px; border-radius: 15px; box-shadow: 0 10px 25px rgba(0,0,0,0.05); }
 .quiz-progress { display: flex; justify-content: space-between; margin-bottom: 20px; }
 .badge { padding: 5px 15px; border-radius: 20px; font-size: 0.8rem; font-weight: bold; }
 .badge.basic { background-color: #feebc8; color: #c05621; }
 .badge.advanced { background-color: #fed7d7; color: #9b2c2c; }
 .badge.shoumei-badge { background-color: #e2e8f0; color: #4a5568; }
-
-.question-box {
-    font-size: 1.3rem;
-    font-weight: bold;
-    margin-bottom: 25px;
-    padding: 20px;
-    background-color: #f7fafc;
-    border-radius: 8px;
-    border-left: 5px solid #4facfe;
-}
+.question-box { font-size: 1.3rem; font-weight: bold; margin-bottom: 25px; padding: 20px; background-color: #f7fafc; border-radius: 8px; border-left: 5px solid #4facfe; }
 .choices-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; }
 @media (max-width: 600px) { .choices-grid { grid-template-columns: 1fr; } }
-
-.choice-btn {
-    background-color: white;
-    border: 2px solid #e2e8f0;
-    padding: 15px;
-    font-size: 1rem;
-    border-radius: 8px;
-    cursor: pointer;
-    font-weight: bold;
-}
+.choice-btn { background-color: white; border: 2px solid #e2e8f0; padding: 15px; font-size: 1rem; border-radius: 8px; cursor: pointer; font-weight: bold; }
 .choice-btn:hover { background-color: #edf2f7; }
 .choice-btn.correct { background-color: #c6f6d5; border-color: #38a169; color: #22543d; }
 .choice-btn.wrong { background-color: #fed7d7; border-color: #e53e3e; color: #742a2a; }
-
 .result-box { margin-top: 25px; padding: 20px; text-align: center; background-color: #f7fafc; border-radius: 8px; }
 .btn { background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%); color: white; border: none; padding: 12px 30px; border-radius: 20px; cursor: pointer; font-weight: bold; }
 .hide { display: none; }
 .back-link { color: #718096; text-decoration: none; font-weight: bold; }
-
-/* ーーー 記述式・証明入力枠のデザイン ーーー */
-.shoumei-input {
-    width: 100%;
-    height: 200px;
-    padding: 15px;
-    font-size: 1rem;
-    border: 2px solid #cbd5e0;
-    border-radius: 8px;
-    resize: vertical;
-    font-family: inherit;
-    box-sizing: border-box;
-}
-.shoumei-input:focus {
-    border-color: #4facfe;
-    outline: none;
-    box-shadow: 0 0 5px rgba(79, 172, 254, 0.5);
-}
-.model-answer-box {
-    margin-top: 15px;
-    padding: 20px;
-    background-color: #ebf8ff;
-    border-left: 5px solid #3182ce;
-    border-radius: 6px;
-    text-align: left;
-    white-space: pre-wrap;
-    font-weight: bold;
-    color: #2b6cb0;
-    line-height: 1.7;
-}
-
+.shoumei-input { width: 100%; height: 180px; padding: 15px; font-size: 1rem; border: 2px solid #cbd5e0; border-radius: 8px; resize: vertical; box-sizing: border-box; }
+.model-answer-box { margin-top: 15px; padding: 20px; background-color: #ebf8ff; border-left: 5px solid #3182ce; border-radius: 6px; text-align: left; white-space: pre-wrap; font-weight: bold; color: #2b6cb0; }
 footer { text-align: center; padding: 20px; margin-top: 40px; background-color: #2d3748; color: white; font-size: 0.85rem; }
