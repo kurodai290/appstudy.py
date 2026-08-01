@@ -27,13 +27,11 @@ const playerNameInput = document.getElementById('player-name-input');
 const saveScoreBtn = document.getElementById('save-score-btn');
 const rankingTableBody = document.getElementById('ranking-table-body');
 
-// 学年ごとに個別のランキングを作るためのユニークなキー
 const urlParams = new URLSearchParams(window.location.search);
 const rankingKey = `ranking_${urlParams.get('file') || 'data_shou1'}`;
 
 quizTitle.innerText = quizTitleText;
 
-// ⏱ タイマーをスタートさせる処理
 function startTimer() {
     startTime = Date.now();
     timerInterval = setInterval(() => {
@@ -50,6 +48,84 @@ function shuffleArray(array) {
     return array.sort(() => Math.random() - 0.5);
 }
 
+// 🌟【最重要・軽量化】開いた時点ではなく、その問題が表示された瞬間にだけ計算する関数
+function buildSingleQuestion(currentData) {
+    let questionString = currentData.q;
+    let finalChoices = [];
+
+    if (currentData.isRandom) {
+        if (currentData.pattern === "shou1_add") {
+            let n1 = getRandomInt(1, 9), n2 = getRandomInt(1, 9);
+            questionString = `${n1} ＋ ${n2} は なに？`;
+            dynamicCorrectAnswer = String(n1 + n2);
+            finalChoices = [dynamicCorrectAnswer, String(n1+n2+1), String(n1+n2-1), String(n1+n2+2)];
+        } 
+        else if (currentData.pattern === "shou1_sub") {
+            let n1 = getRandomInt(5, 10), n2 = getRandomInt(1, 4);
+            questionString = `${n1} － ${n2} は なに？`;
+            dynamicCorrectAnswer = String(n1 - n2);
+            finalChoices = [dynamicCorrectAnswer, String(n1-n2+1), String(n1-n2-1), String(n1-n2-2)];
+        }
+        else if (currentData.pattern === "shou2_kuku") {
+            let n1 = getRandomInt(2, 9), n2 = getRandomInt(2, 9);
+            questionString = `かけざん九九： ${n1} × ${n2} ＝ ❓`;
+            dynamicCorrectAnswer = String(n1 * n2);
+            finalChoices = [dynamicCorrectAnswer, String(n1*n2+2), String(n1*n2-2), String((n1+1)*n2)];
+        }
+        else if (currentData.pattern === "shou3_div") {
+            let n2 = getRandomInt(2, 9), ans = getRandomInt(2, 9);
+            let n1 = n2 * ans;
+            questionString = `わり算： ${n1} ÷ ${n2} ＝ ❓`;
+            dynamicCorrectAnswer = String(ans);
+            finalChoices = [dynamicCorrectAnswer, String(ans+1), String(ans-1), String(ans+2)];
+        }
+        else if (currentData.pattern === "shou4_dec") {
+            let n1 = (getRandomInt(11, 49) / 10), n2 = (getRandomInt(11, 49) / 10);
+            questionString = `小数の計算： ${n1} ＋ ${n2} ＝ ❓`;
+            dynamicCorrectAnswer = (n1 + n2).toFixed(1);
+            finalChoices = [dynamicCorrectAnswer, (n1+n2+0.1).toFixed(1), (n1+n2-0.1).toFixed(1), (n1+n2+0.2).toFixed(1)];
+        }
+        else if (currentData.pattern === "shou5_mul") {
+            let n1 = (getRandomInt(11, 39) / 10), n2 = (getRandomInt(2, 9) / 10);
+            questionString = `小数のかけ算： ${n1} × ${n2} ＝ ❓`;
+            dynamicCorrectAnswer = (n1 * n2).toFixed(2);
+            finalChoices = [dynamicCorrectAnswer, (n1*n2+0.1).toFixed(2), (n1*n2-0.1).toFixed(2), (n1*n2+0.02).toFixed(2)];
+        }
+        else if (currentData.pattern === "shou6_ratio") {
+            let n1 = getRandomInt(2, 5), n2 = getRandomInt(3, 6);
+            let m = getRandomInt(2, 4);
+            questionString = `比の計算： ${n1} : ${n2} ＝ ${n1*m} : ❓`;
+            dynamicCorrectAnswer = String(n2 * m);
+            finalChoices = [dynamicCorrectAnswer, String(n2*m+1), String(n2*m-1), String(n2*m+2)];
+        }
+        else if (currentData.pattern === "chu1_calc") {
+            let n1 = getRandomInt(2, 9), n2 = getRandomInt(3, 9);
+            questionString = `${n1} ＋ (-${n2}) ＝ ❓`;
+            dynamicCorrectAnswer = String(n1 - n2);
+            finalChoices = [dynamicCorrectAnswer, String(n1+n2), String(-n1-n2), String(n1-n2+1)];
+        }
+        else if (currentData.pattern === "chu3_q1") {
+            let a = getRandomInt(3, 9), b = getRandomInt(4, 8), c = getRandomInt(2, 5);
+            questionString = `【静岡県入試・類題】 ${a} ＋ ${b} × (-${c}) を計算しなさい。`;
+            dynamicCorrectAnswer = String(a + (b * -c));
+            finalChoices = [dynamicCorrectAnswer, String((a+b)*-c), String(a - (b * c)), String(a + b * c)];
+        }
+        else if (currentData.pattern === "chu3_q2") {
+            let z = getRandomInt(2, 3), f1 = getRandomInt(3, 5), f2 = getRandomInt(2, 4);
+            questionString = `【静岡県入試・類題】 (${z*f1}a² － ${z*f2}ab) ÷ ${z}a を計算しなさい。`;
+            dynamicCorrectAnswer = `${f1}a - ${f2}b`;
+            finalChoices = [dynamicCorrectAnswer, `${z*f1}a - ${f2}b`, `${f1}a + ${f2}b`, `${f1}a² - ${f2}b`];
+        }
+        finalChoices = shuffleArray(finalChoices);
+    } else {
+        questionString = currentData.q;
+        dynamicCorrectAnswer = currentData.a;
+        finalChoices = currentData.c;
+    }
+
+    return { questionString, finalChoices };
+}
+
 function showQuestion() {
     resultMessage.classList.add('hide');
     choicesContainer.innerHTML = '';
@@ -64,80 +140,9 @@ function showQuestion() {
 
         qNumberText.innerText = `第 ${currentQuestionIndex + 1} 問 / 全 ${questions.length} 問`;
 
-        let questionString = currentData.q;
-        let finalChoices = [];
-
-        if (currentData.isRandom) {
-            if (currentData.pattern === "shou1_add") {
-                let n1 = getRandomInt(1, 9), n2 = getRandomInt(1, 9);
-                questionString = `${n1} ＋ ${n2} は なに？`;
-                dynamicCorrectAnswer = String(n1 + n2);
-                finalChoices = [dynamicCorrectAnswer, String(n1+n2+1), String(n1+n2-1), String(n1+n2+2)];
-            } 
-            else if (currentData.pattern === "shou1_sub") {
-                let n1 = getRandomInt(5, 10), n2 = getRandomInt(1, 4);
-                questionString = `${n1} － ${n2} は なに？`;
-                dynamicCorrectAnswer = String(n1 - n2);
-                finalChoices = [dynamicCorrectAnswer, String(n1-n2+1), String(n1-n2-1), String(n1-n2-2)];
-            }
-            else if (currentData.pattern === "shou2_kuku") {
-                let n1 = getRandomInt(2, 9), n2 = getRandomInt(2, 9);
-                questionString = `かけざん九九： ${n1} × ${n2} ＝ ❓`;
-                dynamicCorrectAnswer = String(n1 * n2);
-                finalChoices = [dynamicCorrectAnswer, String(n1*n2+2), String(n1*n2-2), String((n1+1)*n2)];
-            }
-            else if (currentData.pattern === "shou3_div") {
-                let n2 = getRandomInt(2, 9), ans = getRandomInt(2, 9);
-                let n1 = n2 * ans;
-                questionString = `わり算： ${n1} ÷ ${n2} ＝ ❓`;
-                dynamicCorrectAnswer = String(ans);
-                finalChoices = [dynamicCorrectAnswer, String(ans+1), String(ans-1), String(ans+2)];
-            }
-            else if (currentData.pattern === "shou4_dec") {
-                let n1 = (getRandomInt(11, 49) / 10), n2 = (getRandomInt(11, 49) / 10);
-                questionString = `小数の計算： ${n1} ＋ ${n2} ＝ ❓`;
-                dynamicCorrectAnswer = (n1 + n2).toFixed(1);
-                finalChoices = [dynamicCorrectAnswer, (n1+n2+0.1).toFixed(1), (n1+n2-0.1).toFixed(1), (n1+n2+0.2).toFixed(1)];
-            }
-            else if (currentData.pattern === "shou5_mul") {
-                let n1 = (getRandomInt(11, 39) / 10), n2 = (getRandomInt(2, 9) / 10);
-                questionString = `小数のかけ算： ${n1} × ${n2} ＝ ❓`;
-                dynamicCorrectAnswer = (n1 * n2).toFixed(2);
-                finalChoices = [dynamicCorrectAnswer, (n1*n2+0.1).toFixed(2), (n1*n2-0.1).toFixed(2), (n1*n2+0.02).toFixed(2)];
-            }
-            else if (currentData.pattern === "shou6_ratio") {
-                let n1 = getRandomInt(2, 5), n2 = getRandomInt(3, 6);
-                let m = getRandomInt(2, 4);
-                questionString = `比の計算： ${n1} : ${n2} ＝ ${n1*m} : ❓`;
-                dynamicCorrectAnswer = String(n2 * m);
-                finalChoices = [dynamicCorrectAnswer, String(n2*m+1), String(n2*m-1), String(n2*m+2)];
-            }
-            else if (currentData.pattern === "chu1_calc") {
-                let n1 = getRandomInt(2, 9), n2 = getRandomInt(3, 9);
-                questionString = `${n1} ＋ (-${n2}) ＝ ❓`;
-                dynamicCorrectAnswer = String(n1 - n2);
-                finalChoices = [dynamicCorrectAnswer, String(n1+n2), String(-n1-n2), String(n1-n2+1)];
-            }
-            else if (currentData.pattern === "chu3_q1") {
-                let a = getRandomInt(3, 9), b = getRandomInt(4, 8), c = getRandomInt(2, 5);
-                questionString = `【静岡県入試・類題】 ${a} ＋ ${b} × (-${c}) を計算しなさい。`;
-                dynamicCorrectAnswer = String(a + (b * -c));
-                finalChoices = [dynamicCorrectAnswer, String((a+b)*-c), String(a - (b * c)), String(a + b * c)];
-            }
-            else if (currentData.pattern === "chu3_q2") {
-                let z = getRandomInt(2, 3), f1 = getRandomInt(3, 5), f2 = getRandomInt(2, 4);
-                questionString = `【静岡県入試・類題】 (${z*f1}a² － ${z*f2}ab) ÷ ${z}a を計算しなさい。`;
-                dynamicCorrectAnswer = `${f1}a - ${f2}b`;
-                finalChoices = [dynamicCorrectAnswer, `${z*f1}a - ${f2}b`, `${f1}a + ${f2}b`, `${f1}a² - ${f2}b`];
-            }
-            finalChoices = shuffleArray(finalChoices);
-        } else {
-            questionString = currentData.q;
-            dynamicCorrectAnswer = currentData.a;
-            finalChoices = currentData.c;
-        }
-
-        qText.innerText = questionString;
+        // 🌟 ここで今必要な1問だけを生成・構築する
+        let buildResult = buildSingleQuestion(currentData);
+        qText.innerText = buildResult.questionString;
 
         if (currentData.type === "記述") {
             const textarea = document.createElement('textarea');
@@ -161,7 +166,7 @@ function showQuestion() {
             };
             choicesContainer.appendChild(submitBtn);
         } else {
-            finalChoices.forEach(choice => {
+            buildResult.finalChoices.forEach(choice => {
                 const button = document.createElement('button');
                 button.innerText = choice;
                 button.classList.add('choice-btn');
@@ -211,3 +216,4 @@ function displayRanking() {
     }
     rankingData.forEach((record, index) => {
         const row = document.createElement('tr');
+        row.innerHTML = `<td><strong>${index + 1}位</strong></td><td>${record.name}</td><td>${record.score}問</td><td>${record.time}秒</td>`;
